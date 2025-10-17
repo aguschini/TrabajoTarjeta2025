@@ -3,16 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\TarjetaTests\\TrabajoTarjeta2025.Tests.csproj||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Tarjeta\\TarjetaTests\\TrabajoTarjeta2025.Tests.csproj||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\TarjetaTest.cs||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Tarjeta\\Tarjeta\\TarjetaTest.cs||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\Tarjeta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Tarjeta\\Tarjeta\\Tarjeta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Tarjeta\\Tarjeta\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\Boleto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Tarjeta\\Tarjeta\\Boleto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\Colectivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Tarjeta\\Tarjeta\\Colectivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Tarjeta\\Tarjeta\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,43 +34,86 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Tarjeta.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\Tarjeta.cs",
-              "RelativeDocumentMoniker": "Tarjeta\\Tarjeta\\Tarjeta.cs",
-              "ToolTip": "C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\Tarjeta.cs",
-              "RelativeToolTip": "Tarjeta\\Tarjeta\\Tarjeta.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-17T13:40:10.171Z",
+              "Title": "TrabajoTarjeta2025.Tests.csproj",
+              "DocumentMoniker": "C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\TarjetaTests\\TrabajoTarjeta2025.Tests.csproj",
+              "RelativeDocumentMoniker": "Tarjeta\\TarjetaTests\\TrabajoTarjeta2025.Tests.csproj",
+              "ToolTip": "C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\TarjetaTests\\TrabajoTarjeta2025.Tests.csproj",
+              "RelativeToolTip": "Tarjeta\\TarjetaTests\\TrabajoTarjeta2025.Tests.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-10-17T15:09:59.17Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "TarjetaTest.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\TarjetaTest.cs",
+              "RelativeDocumentMoniker": "Tarjeta\\Tarjeta\\TarjetaTest.cs",
+              "ToolTip": "C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\TarjetaTest.cs",
+              "RelativeToolTip": "Tarjeta\\Tarjeta\\TarjetaTest.cs",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAcwF0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T15:06:58.82Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Tarjeta.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\Tarjeta.cs",
+              "RelativeDocumentMoniker": "Tarjeta\\Tarjeta\\Tarjeta.cs",
+              "ToolTip": "C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\Tarjeta.cs",
+              "RelativeToolTip": "Tarjeta\\Tarjeta\\Tarjeta.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAkAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T14:21:04.53Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Boleto.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\Boleto.cs",
+              "RelativeDocumentMoniker": "Tarjeta\\Tarjeta\\Boleto.cs",
+              "ToolTip": "C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\Boleto.cs",
+              "RelativeToolTip": "Tarjeta\\Tarjeta\\Boleto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T14:21:04.382Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\Program.cs",
               "RelativeDocumentMoniker": "Tarjeta\\Tarjeta\\Program.cs",
               "ToolTip": "C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\Program.cs",
               "RelativeToolTip": "Tarjeta\\Tarjeta\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-17T13:40:10.133Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Colectivo.cs",
               "DocumentMoniker": "C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\Colectivo.cs",
               "RelativeDocumentMoniker": "Tarjeta\\Tarjeta\\Colectivo.cs",
               "ToolTip": "C:\\Users\\PC\\source\\repos\\aguschini\\TrabajoTarjeta2025\\Tarjeta\\Tarjeta\\Colectivo.cs",
               "RelativeToolTip": "Tarjeta\\Tarjeta\\Colectivo.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-17T13:40:09.63Z",
               "EditorCaption": ""

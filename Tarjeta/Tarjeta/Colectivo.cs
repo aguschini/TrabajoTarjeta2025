@@ -6,34 +6,29 @@ using System.Threading.Tasks;
 
 namespace Tarjeta
 {
-    class Colectivo
+    public class Colectivo
     {
-        // Atributos
-        public string Linea { get; set; }
-
-        // Constante de precio del boleto
+        public string Linea { get; private set; }
         private const int PRECIO_BOLETO = 1580;
 
-        // Constructor
         public Colectivo(string linea)
         {
             Linea = linea;
         }
 
-        // Método Pagar
-        public void Pagar(Tarjeta tarjeta)
+        public Boleto pagarCon(Tarjeta tarjeta)
         {
-            // Verificar si el saldo es suficiente para el pago
-            if (tarjeta.Saldo >= PRECIO_BOLETO)
+            if (tarjeta == null) return null;
+
+            bool pagado = tarjeta.Descontar(PRECIO_BOLETO);
+            if (pagado)
             {
-                tarjeta.Saldo -= PRECIO_BOLETO;  // Restar el precio del boleto al saldo de la tarjeta
-                Console.WriteLine($"Pago exitoso. El nuevo saldo de la tarjeta es: {tarjeta.Saldo}");
+                return new Boleto(PRECIO_BOLETO);
             }
-            else
-            {
-                Console.WriteLine("Saldo insuficiente para realizar el pago.");
-            }
+
+            return null;
         }
     }
 }
+
 
