@@ -1,5 +1,8 @@
-[![codecov](https://codecov.io/gh/mgonzalesips/TrabajoTarjeta2025/graph/badge.svg?token=XI7V37W69W)](https://codecov.io/gh/mgonzalesips/TrabajoTarjeta2025)
-# Trabajo Tarjeta 2025
+- name: Upload test results to Codecov
+  if: ${{ !cancelled() }}
+  uses: codecov/test-results-action@v1
+  with:
+    token: ${{ secrets.CODECOV_TOKEN }}# Trabajo Tarjeta 2025
 
 El siguiente trabajo es un enunciado iterativo. Regularmente se ampliara y/o modificara el enunciado.
 <br><br>
