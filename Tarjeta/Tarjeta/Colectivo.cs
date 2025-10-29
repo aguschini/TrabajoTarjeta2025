@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tarjeta
 {
@@ -12,7 +8,7 @@ namespace Tarjeta
         public string Linea { get; set; }
 
         // Constante de precio del boleto
-        private const int PRECIO_BOLETO = 1580;
+        private const float PRECIO_BOLETO = 1580f;
 
         // Constructor
         public Colectivo(string linea)
@@ -20,20 +16,34 @@ namespace Tarjeta
             Linea = linea;
         }
 
-        // Método Pagar
-        public void Pagar(Tarjeta tarjeta)
+        /// <summary>
+        /// Método principal - retorna bool según éxito del pago
+        /// Funciona con todas las tarjetas (normal, medio boleto, gratuitas)
+        /// </summary>
+        public bool PagarCon(Tarjeta tarjeta)
         {
-            // Verificar si el saldo es suficiente para el pago
-            if (tarjeta.Saldo >= PRECIO_BOLETO)
+            // Intenta descontar el saldo
+            // Cada tipo de tarjeta maneja el descuento según su lógica
+            bool pagoExitoso = tarjeta.DescontarSaldo(PRECIO_BOLETO);
+
+            if (pagoExitoso)
             {
-                tarjeta.Saldo -= PRECIO_BOLETO;  // Restar el precio del boleto al saldo de la tarjeta
-                Console.WriteLine($"Pago exitoso. El nuevo saldo de la tarjeta es: {tarjeta.Saldo}");
+                Console.WriteLine($"Pago exitoso en línea {Linea}. Nuevo saldo: ${tarjeta.Saldo}");
             }
             else
             {
-                Console.WriteLine("Saldo insuficiente para realizar el pago.");
+                Console.WriteLine($"Pago rechazado en línea {Linea}. Saldo insuficiente: ${tarjeta.Saldo}");
             }
+
+            return pagoExitoso;
+        }
+
+        /// <summary>
+        /// Método legacy - mantener para compatibilidad con tests anteriores
+        /// </summary>
+        public void Pagar(Tarjeta tarjeta)
+        {
+            PagarCon(tarjeta);
         }
     }
 }
-

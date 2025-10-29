@@ -38,13 +38,13 @@ namespace Tests1
         public void Pagar_SaldoInsuficiente_DeberiaMantenerSaldo()
         {
             // Arrange
-            _tarjeta = new Tarjeta.Tarjeta(1000f, 1); // Saldo insuficiente
+            _tarjeta = new Tarjeta.Tarjeta(200f, 1); // Saldo insuficiente
 
             // Act
             _colectivo.Pagar(_tarjeta);
 
             // Assert
-            Assert.That(_tarjeta.Saldo, Is.EqualTo(1000f));
+            Assert.That(_tarjeta.Saldo, Is.EqualTo(200));
         }
 
         [Test]
