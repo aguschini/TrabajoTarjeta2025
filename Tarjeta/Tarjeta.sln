@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tarjeta", "Tarjeta\Tarjeta.csproj", "{A3013526-EAB9-4F90-9077-CB881883942F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests1", "Tests1\Tests1.csproj", "{178E788F-D932-45AF-99A6-C850B6FFCC12}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución", "Elementos de la solución", "{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A3013526-EAB9-4F90-9077-CB881883942F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3013526-EAB9-4F90-9077-CB881883942F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3013526-EAB9-4F90-9077-CB881883942F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3013526-EAB9-4F90-9077-CB881883942F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{178E788F-D932-45AF-99A6-C850B6FFCC12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{178E788F-D932-45AF-99A6-C850B6FFCC12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{178E788F-D932-45AF-99A6-C850B6FFCC12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{178E788F-D932-45AF-99A6-C850B6FFCC12}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B39DC481-3894-41AA-84F4-AA0C4E6F89DA}
+	EndGlobalSection
+EndGlobal
