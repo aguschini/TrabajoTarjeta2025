@@ -1,4 +1,4 @@
-[![codecov](https://codecov.io/gh/aguschini/TrabajoTarjeta2025/graph/badge.svg?token=Z1FF2Z8TY4)](https://codecov.io/gh/aguschini/TrabajoTarjeta2025)
+[![codecov](https://codecov.io/gh/aguschini/TrabajoTarjeta2025/branch/feature%2Fmedio-boleto/graph/badge.svg?token=Z1FF2Z8TY4)](https://codecov.io/gh/aguschini/TrabajoTarjeta2025)
 
 El siguiente trabajo es un enunciado iterativo. Regularmente se ampliara y/o modificara el enunciado.
 <br><br>
