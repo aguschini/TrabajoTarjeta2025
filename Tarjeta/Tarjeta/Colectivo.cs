@@ -18,7 +18,7 @@ namespace Tarjeta
         }
 
         /// <summary>
-        /// Método principal - retorna bool según éxito del pago
+        /// Método principal - retorna Boleto según éxito del pago
         /// Funciona con todas las tarjetas (normal, medio boleto, gratuitas)
         /// </summary>
         public Boleto PagarCon(Tarjeta tarjeta, Tiempo tiempo)
@@ -26,7 +26,18 @@ namespace Tarjeta
             const float PRECIO_BOLETO = 1580f;
 
             float saldoAnterior = tarjeta.Saldo;
-            bool pagoExitoso = tarjeta.DescontarSaldo(PRECIO_BOLETO);
+            bool pagoExitoso;
+
+            // Si es medio boleto, usar el método con tiempo para aplicar restricciones
+            if (tarjeta is MedioBoletoEstudiantil medioBoleto)
+            {
+                pagoExitoso = medioBoleto.DescontarSaldo(PRECIO_BOLETO, tiempo);
+            }
+            else
+            {
+                // Para otros tipos de tarjeta, usar el método normal
+                pagoExitoso = tarjeta.DescontarSaldo(PRECIO_BOLETO);
+            }
 
             if (!pagoExitoso) return null;
 
@@ -44,7 +55,6 @@ namespace Tarjeta
             return boleto;
         }
 
-
         /// <summary>
         /// Método legacy - mantener para compatibilidad con tests anteriores
         /// </summary>
@@ -52,7 +62,5 @@ namespace Tarjeta
         {
             PagarCon(tarjeta, tiempo);
         }
-
     }
 }
-
