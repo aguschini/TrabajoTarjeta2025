@@ -24,12 +24,14 @@ namespace Tarjeta
         public Boleto PagarCon(Tarjeta tarjeta, Tiempo tiempo)
         {
             const float PRECIO_BOLETO = 1580f;
-            float totalAbonado = tarjeta is MedioBoletoEstudiantil ? PRECIO_BOLETO / 2f :
-                                 tarjeta is BoletoGratuitoEstudiantil or FranquiciaCompleta ? 0f :
-                                 PRECIO_BOLETO;
 
-            bool pagoExitoso = tarjeta.DescontarSaldo(totalAbonado);
+            float saldoAnterior = tarjeta.Saldo;
+            bool pagoExitoso = tarjeta.DescontarSaldo(PRECIO_BOLETO);
+
             if (!pagoExitoso) return null;
+
+            // El total abonado es la diferencia entre el saldo anterior y el actual
+            float totalAbonado = saldoAnterior - tarjeta.Saldo;
 
             Boleto boleto = new Boleto(
                 tiempo.Now(),
@@ -39,7 +41,6 @@ namespace Tarjeta
                 tarjeta.Saldo,
                 tarjeta.Id
             );
-
             return boleto;
         }
 

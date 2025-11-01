@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Tarjeta;
+using TrabajoTarjeta;
 
 namespace Tests1
 {
@@ -9,11 +10,13 @@ namespace Tests1
     public class FranquiciasTest
     {
         private Colectivo _colectivo;
+        private TiempoFalso _tiempo;
 
         [SetUp]
         public void Setup()
         {
             _colectivo = new Colectivo("125");
+            _tiempo = new TiempoFalso(2024, 11, 1);
         }
 
         // ============================================
@@ -106,12 +109,12 @@ namespace Tests1
             var medioBoleto = new MedioBoletoEstudiantil(2000f, 1);
 
             // Act
-            bool resultado = _colectivo.PagarCon(medioBoleto);
+            Boleto boleto = _colectivo.PagarCon(medioBoleto, _tiempo);
 
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(resultado, Is.True, "El pago debería ser exitoso");
+                Assert.That(boleto, Is.Not.Null, "El pago debería ser exitoso");
                 Assert.That(medioBoleto.Saldo, Is.EqualTo(1210f), "Debería descontar 790: 2000 - 790 = 1210");
             });
         }
@@ -162,12 +165,12 @@ namespace Tests1
             float saldoInicial = boletoGratuito.Saldo;
 
             // Act
-            bool resultado = _colectivo.PagarCon(boletoGratuito);
+            Boleto boleto = _colectivo.PagarCon(boletoGratuito, _tiempo);
 
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(resultado, Is.True, "El pago debería ser exitoso");
+                Assert.That(boleto, Is.Not.Null, "El pago debería ser exitoso");
                 Assert.That(boletoGratuito.Saldo, Is.EqualTo(saldoInicial), "El saldo no debería cambiar");
             });
         }
@@ -239,12 +242,12 @@ namespace Tests1
             float saldoInicial = franquicia.Saldo;
 
             // Act
-            bool resultado = _colectivo.PagarCon(franquicia);
+            Boleto boleto = _colectivo.PagarCon(franquicia, _tiempo);
 
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(resultado, Is.True, "El pago debería ser exitoso");
+                Assert.That(boleto, Is.Not.Null, "El pago debería ser exitoso");
                 Assert.That(franquicia.Saldo, Is.EqualTo(saldoInicial), "El saldo no debería cambiar");
             });
         }
