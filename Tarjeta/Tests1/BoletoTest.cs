@@ -1,36 +1,65 @@
 using NUnit.Framework;
 using Tarjeta;
+using System;
 
 namespace Tests1
 {
     public class BoletoTest
     {
-        private Tarjeta.Boleto _boleto;
+        private Boleto _boleto;
 
-        [SetUp]
+    [SetUp]
         public void Setup()
         {
-            _boleto = new Tarjeta.Boleto(1580f); 
+            // Crear un Boleto de prueba con valores fijos
+            _boleto = new Boleto(
+                fecha: new DateTime(2025, 11, 1),
+                tipoTarjeta: "MedioBoletoEstudiantil",
+                linea: "Linea 42",
+                total: 790f,
+                saldoRestante: 210f,
+                id: 123
+            );
         }
 
         [Test]
-        public void Constructor_DeberiaCrearBoletoConPrecioCorrecto()
+        public void Constructor_DeberiaCrearBoletoConValoresCorrectos()
         {
-            // Assert
-            Assert.That(_boleto.Precio, Is.EqualTo(1580f));
+            Assert.That(_boleto.Fecha, Is.EqualTo(new DateTime(2025, 11, 1)));
+            Assert.That(_boleto.TipoTarjeta, Is.EqualTo("MedioBoletoEstudiantil"));
+            Assert.That(_boleto.LineaColectivo, Is.EqualTo("Linea 42"));
+            Assert.That(_boleto.TotalAbonado, Is.EqualTo(790f));
+            Assert.That(_boleto.SaldoRestante, Is.EqualTo(210f));
+            Assert.That(_boleto.IdTarjeta, Is.EqualTo(123));
         }
 
         [Test]
-        public void Precio_DeberiaPoderModificarValor() 
+        public void Propiedades_DeberianPoderModificarValores()
         {
             // Arrange
-            float nuevoPrecio = 2000f;
+            var nuevaFecha = new DateTime(2025, 12, 1);
+            var nuevoTipo = "BoletoGratuitoEstudiantil";
+            var nuevaLinea = "Linea 15";
+            float nuevoTotal = 0f;
+            float nuevoSaldo = 500f;
+            int nuevoId = 999;
 
             // Act
-            _boleto.Precio = nuevoPrecio;
+            _boleto.Fecha = nuevaFecha;
+            _boleto.TipoTarjeta = nuevoTipo;
+            _boleto.LineaColectivo = nuevaLinea;
+            _boleto.TotalAbonado = nuevoTotal;
+            _boleto.SaldoRestante = nuevoSaldo;
+            _boleto.IdTarjeta = nuevoId;
 
             // Assert
-            Assert.That(_boleto.Precio, Is.EqualTo(nuevoPrecio)); 
+            Assert.That(_boleto.Fecha, Is.EqualTo(nuevaFecha));
+            Assert.That(_boleto.TipoTarjeta, Is.EqualTo(nuevoTipo));
+            Assert.That(_boleto.LineaColectivo, Is.EqualTo(nuevaLinea));
+            Assert.That(_boleto.TotalAbonado, Is.EqualTo(nuevoTotal));
+            Assert.That(_boleto.SaldoRestante, Is.EqualTo(nuevoSaldo));
+            Assert.That(_boleto.IdTarjeta, Is.EqualTo(nuevoId));
         }
     }
+
 }

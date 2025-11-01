@@ -1,4 +1,5 @@
 ﻿using System;
+using TrabajoTarjeta;
 
 namespace Tarjeta
 {
@@ -20,30 +21,37 @@ namespace Tarjeta
         /// Método principal - retorna bool según éxito del pago
         /// Funciona con todas las tarjetas (normal, medio boleto, gratuitas)
         /// </summary>
-        public bool PagarCon(Tarjeta tarjeta)
+        public Boleto PagarCon(Tarjeta tarjeta, Tiempo tiempo)
         {
-            // Intenta descontar el saldo
-            // Cada tipo de tarjeta maneja el descuento según su lógica
-            bool pagoExitoso = tarjeta.DescontarSaldo(PRECIO_BOLETO);
+            const float PRECIO_BOLETO = 1580f;
+            float totalAbonado = tarjeta is MedioBoletoEstudiantil ? PRECIO_BOLETO / 2f :
+                                 tarjeta is BoletoGratuitoEstudiantil or FranquiciaCompleta ? 0f :
+                                 PRECIO_BOLETO;
 
-            if (pagoExitoso)
-            {
-                Console.WriteLine($"Pago exitoso en línea {Linea}. Nuevo saldo: ${tarjeta.Saldo}");
-            }
-            else
-            {
-                Console.WriteLine($"Pago rechazado en línea {Linea}. Saldo insuficiente: ${tarjeta.Saldo}");
-            }
+            bool pagoExitoso = tarjeta.DescontarSaldo(totalAbonado);
+            if (!pagoExitoso) return null;
 
-            return pagoExitoso;
+            Boleto boleto = new Boleto(
+                tiempo.Now(),
+                tarjeta.GetType().Name,
+                Linea,
+                totalAbonado,
+                tarjeta.Saldo,
+                tarjeta.Id
+            );
+
+            return boleto;
         }
+
 
         /// <summary>
         /// Método legacy - mantener para compatibilidad con tests anteriores
         /// </summary>
-        public void Pagar(Tarjeta tarjeta)
+        public void Pagar(Tarjeta tarjeta, Tiempo tiempo)
         {
-            PagarCon(tarjeta);
+            PagarCon(tarjeta, tiempo);
         }
+
     }
 }
+

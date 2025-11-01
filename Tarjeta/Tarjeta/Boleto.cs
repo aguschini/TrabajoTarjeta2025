@@ -9,14 +9,25 @@ namespace Tarjeta
     public class Boleto
     {
         //Atributos
-        public float Precio { get; set; }
+        public DateTime Fecha { get; set; }
+        public string TipoTarjeta { get; set; }
+        public string LineaColectivo { get; set; }
+        public float TotalAbonado { get; set; }
+        public float SaldoRestante { get; set; }
+        public int IdTarjeta { get; set; }
 
         //Constructor
-        public Boleto(float precio)
+        public Boleto(DateTime fecha, string tipoTarjeta, string linea, float total, float saldoRestante, int id)
         {
-            Precio = precio;
+            Fecha = fecha;
+            TipoTarjeta = tipoTarjeta;
+            LineaColectivo = linea;
+            TotalAbonado = total;
+            SaldoRestante = saldoRestante;
+            IdTarjeta = id;
         }
-
     }
+
 }
+
 
