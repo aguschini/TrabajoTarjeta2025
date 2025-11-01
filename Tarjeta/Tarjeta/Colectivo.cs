@@ -33,6 +33,11 @@ namespace Tarjeta
             {
                 pagoExitoso = medioBoleto.DescontarSaldo(PRECIO_BOLETO, tiempo);
             }
+            // Si es boleto gratuito, usar el método con tiempo para aplicar restricciones
+            else if (tarjeta is BoletoGratuitoEstudiantil boletoGratuito)
+            {
+                pagoExitoso = boletoGratuito.DescontarSaldo(PRECIO_BOLETO, tiempo);
+            }
             else
             {
                 // Para otros tipos de tarjeta, usar el método normal

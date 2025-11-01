@@ -294,6 +294,136 @@ namespace Tests1
         }
 
         // ============================================
+        //   TESTS DE LIMITACIONES BOLETO GRATUITO
+        // ============================================
+
+        [Test]
+        public void BoletoGratuito_TercerViajeMismoDia_CobraPrecioCompleto()
+        {
+            // Arrange
+            var boletoGratuito = new BoletoGratuitoEstudiantil(5000f, 2);
+
+            // Act - Primer viaje gratuito
+            Boleto boleto1 = _colectivo.PagarCon(boletoGratuito, _tiempo);
+
+            // Act - Segundo viaje gratuito
+            Boleto boleto2 = _colectivo.PagarCon(boletoGratuito, _tiempo);
+
+            // Act - Tercer viaje (debería cobrar completo)
+            Boleto boleto3 = _colectivo.PagarCon(boletoGratuito, _tiempo);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(boleto1.TotalAbonado, Is.EqualTo(0f), "Primer viaje: gratuito");
+                Assert.That(boleto2.TotalAbonado, Is.EqualTo(0f), "Segundo viaje: gratuito");
+                Assert.That(boleto3.TotalAbonado, Is.EqualTo(1580f),
+                    "Tercer viaje del día: precio completo (máximo 2 gratuitos por día)");
+                Assert.That(boletoGratuito.Saldo, Is.EqualTo(3420f), "5000 - 0 - 0 - 1580 = 3420");
+            });
+        }
+
+        [Test]
+        public void BoletoGratuito_CuartoYQuintoViaje_CobranPrecioCompleto()
+        {
+            // Arrange
+            var boletoGratuito = new BoletoGratuitoEstudiantil(10000f, 2);
+
+            // Act - Dos viajes gratuitos
+            _colectivo.PagarCon(boletoGratuito, _tiempo); // Gratis
+            _colectivo.PagarCon(boletoGratuito, _tiempo); // Gratis
+
+            // Act - Viajes 3, 4 y 5 (deberían cobrar completo)
+            Boleto boleto3 = _colectivo.PagarCon(boletoGratuito, _tiempo);
+            Boleto boleto4 = _colectivo.PagarCon(boletoGratuito, _tiempo);
+            Boleto boleto5 = _colectivo.PagarCon(boletoGratuito, _tiempo);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(boleto3.TotalAbonado, Is.EqualTo(1580f), "Tercer viaje: completo");
+                Assert.That(boleto4.TotalAbonado, Is.EqualTo(1580f), "Cuarto viaje: completo");
+                Assert.That(boleto5.TotalAbonado, Is.EqualTo(1580f), "Quinto viaje: completo");
+                Assert.That(boletoGratuito.Saldo, Is.EqualTo(5260f), "10000 - 0 - 0 - 1580 - 1580 - 1580 = 5260");
+            });
+        }
+
+        [Test]
+        public void BoletoGratuito_NuevoDia_ReiniciaContador()
+        {
+            // Arrange
+            var boletoGratuito = new BoletoGratuitoEstudiantil(10000f, 2);
+
+            // Act - Dos viajes gratuitos el primer día
+            _colectivo.PagarCon(boletoGratuito, _tiempo); // Gratis
+            _colectivo.PagarCon(boletoGratuito, _tiempo); // Gratis
+
+            // Tercer viaje del primer día (debería cobrar completo)
+            Boleto boleto3Dia1 = _colectivo.PagarCon(boletoGratuito, _tiempo);
+
+            // Avanzar al día siguiente
+            _tiempo.AgregarDias(1);
+
+            // Primer viaje del nuevo día (debería ser gratuito otra vez)
+            Boleto boleto1Dia2 = _colectivo.PagarCon(boletoGratuito, _tiempo);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(boleto3Dia1.TotalAbonado, Is.EqualTo(1580f),
+                    "Tercer viaje día 1: precio completo");
+                Assert.That(boleto1Dia2.TotalAbonado, Is.EqualTo(0f),
+                    "Primer viaje día 2: gratuito (contador reiniciado)");
+                Assert.That(boletoGratuito.Saldo, Is.EqualTo(8420f), "10000 - 0 - 0 - 1580 - 0 = 8420");
+            });
+        }
+
+        [Test]
+        public void BoletoGratuito_TercerViajeConPocoSaldo_PermiteSaldoNegativo()
+        {
+            // Arrange
+            var boletoGratuito = new BoletoGratuitoEstudiantil(1000f, 2);
+
+            // Act - Dos viajes gratuitos
+            Boleto boleto1 = _colectivo.PagarCon(boletoGratuito, _tiempo);
+            Boleto boleto2 = _colectivo.PagarCon(boletoGratuito, _tiempo);
+
+            // Act - Tercer viaje (cobra completo, permite saldo negativo)
+            Boleto boleto3 = _colectivo.PagarCon(boletoGratuito, _tiempo);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(boleto1, Is.Not.Null, "Primer viaje: exitoso y gratuito");
+                Assert.That(boleto2, Is.Not.Null, "Segundo viaje: exitoso y gratuito");
+                Assert.That(boleto3, Is.Not.Null, "Tercer viaje: exitoso pero cobra completo");
+                Assert.That(boleto3.TotalAbonado, Is.EqualTo(1580f), "Tercer viaje cobra precio completo");
+                Assert.That(boletoGratuito.Saldo, Is.EqualTo(-580f), "Permite saldo negativo: 1000 - 1580 = -580");
+            });
+        }
+
+        [Test]
+        public void BoletoGratuito_TercerViajeExcediendoLimite_NoPuedePagar()
+        {
+            // Arrange
+            var boletoGratuito = new BoletoGratuitoEstudiantil(200f, 2); // Saldo que excedería -1200
+
+            // Act - Dos viajes gratuitos
+            _colectivo.PagarCon(boletoGratuito, _tiempo);
+            _colectivo.PagarCon(boletoGratuito, _tiempo);
+
+            // Act - Tercer viaje (200 - 1580 = -1380, excede límite de -1200)
+            Boleto boleto3 = _colectivo.PagarCon(boletoGratuito, _tiempo);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(boleto3, Is.Null, "Tercer viaje falla: excedería saldo mínimo de -1200");
+                Assert.That(boletoGratuito.Saldo, Is.EqualTo(200f), "Saldo no cambia al fallar el pago");
+            });
+        }
+
+        // ============================================
         //       TESTS DE FRANQUICIA COMPLETA
         // ============================================
 

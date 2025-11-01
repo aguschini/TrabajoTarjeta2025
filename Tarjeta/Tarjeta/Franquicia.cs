@@ -5,22 +5,106 @@ namespace Tarjeta
 {
     /// <summary>
     /// Tarjeta de boleto gratuito estudiantil - viaja gratis (paga $0)
+    /// Limitación: máximo 2 viajes gratuitos por día
     /// </summary>
     public class BoletoGratuitoEstudiantil : Tarjeta
     {
+        // Atributos para controlar las limitaciones
+        private int viajesGratuitosHoy;
+        private DateTime? fechaUltimoDia;
+
+        // Constantes
+        private const int MAX_VIAJES_GRATUITOS = 2;
+
         // Constructor
         public BoletoGratuitoEstudiantil(float saldo, int id) : base(saldo, id)
         {
+            viajesGratuitosHoy = 0;
+            fechaUltimoDia = null;
         }
 
         /// <summary>
-        /// No descuenta nada - viaja gratis
+        /// Verifica si puede usar boleto gratuito en este momento
+        /// </summary>
+        private bool PuedeUsarBoletoGratuito(Tiempo tiempo)
+        {
+            DateTime ahora = tiempo.Now();
+
+            // Verificar si es un nuevo día
+            if (fechaUltimoDia.HasValue && ahora.Date != fechaUltimoDia.Value.Date)
+            {
+                // Es un nuevo día, reiniciar contador
+                viajesGratuitosHoy = 0;
+            }
+
+            // Verificar si ya usó los 2 viajes gratuitos del día
+            if (viajesGratuitosHoy >= MAX_VIAJES_GRATUITOS)
+            {
+                return false; // Ya usó los 2 viajes gratuitos
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Registra el viaje gratuito realizado
+        /// </summary>
+        private void RegistrarViajeGratuito(Tiempo tiempo)
+        {
+            DateTime ahora = tiempo.Now();
+
+            // Si es un nuevo día, reiniciar el contador
+            if (fechaUltimoDia.HasValue && ahora.Date != fechaUltimoDia.Value.Date)
+            {
+                viajesGratuitosHoy = 0;
+            }
+
+            fechaUltimoDia = ahora;
+            viajesGratuitosHoy++;
+        }
+
+        /// <summary>
+        /// Descuenta el saldo considerando las limitaciones de boleto gratuito
+        /// Requiere pasar el objeto Tiempo para aplicar restricciones
+        /// </summary>
+        public bool DescontarSaldo(float monto, Tiempo tiempo)
+        {
+            // Verificar si puede usar boleto gratuito
+            if (PuedeUsarBoletoGratuito(tiempo))
+            {
+                // Viaja gratis
+                RegistrarViajeGratuito(tiempo);
+                return true;
+            }
+            else
+            {
+                // Ya usó los 2 viajes gratuitos, cobra precio completo
+                return base.DescontarSaldo(monto);
+            }
+        }
+
+        /// <summary>
+        /// Sobrecarga del método original para mantener compatibilidad (sin tiempo)
+        /// En este caso siempre viaja gratis sin restricciones
         /// </summary>
         public override bool DescontarSaldo(float monto)
         {
             // No descuenta saldo, siempre retorna true (puede viajar gratis)
             return true;
         }
+
+        /// <summary>
+        /// Método público para consultar si puede usar boleto gratuito (útil para testing)
+        /// </summary>
+        public bool PuedeUsarDescuento(Tiempo tiempo)
+        {
+            return PuedeUsarBoletoGratuito(tiempo);
+        }
+
+        /// <summary>
+        /// Obtener la cantidad de viajes gratuitos realizados hoy (útil para testing)
+        /// </summary>
+        public int ViajesGratuitosHoy => viajesGratuitosHoy;
     }
 
     /// <summary>
