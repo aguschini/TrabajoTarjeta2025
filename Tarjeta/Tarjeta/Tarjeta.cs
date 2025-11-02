@@ -8,10 +8,11 @@ namespace Tarjeta
         // Atributos
         public float Saldo { get; set; }
         public int Id { get; set; }
+        public float SaldoPendiente { get; protected set; }
 
         // Constantes
         protected const float SALDO_MINIMO = -1200f;
-        protected const float SALDO_MAXIMO = 40000f;
+        protected const float SALDO_MAXIMO = 56000f;
 
         // Cargas permitidas
         protected List<float> cargasPermitidas = new List<float>
@@ -24,6 +25,32 @@ namespace Tarjeta
         {
             Saldo = saldo;
             Id = id;
+            SaldoPendiente = 0f;
+        }
+
+        /// <summary>
+        /// Acredita el saldo pendiente a la tarjeta hasta el máximo permitido
+        /// </summary>
+        public void AcreditarCarga()
+        {
+            if (SaldoPendiente <= 0)
+            {
+                return; // No hay saldo pendiente
+            }
+
+            // Calcular cuánto se puede acreditar
+            float espacioDisponible = SALDO_MAXIMO - Saldo;
+
+            if (espacioDisponible <= 0)
+            {
+                return; // La tarjeta ya está al máximo
+            }
+
+            // Acreditar lo que se pueda
+            float montoAAcreditar = Math.Min(SaldoPendiente, espacioDisponible);
+
+            Saldo += montoAAcreditar;
+            SaldoPendiente -= montoAAcreditar;
         }
 
         // Método cargar
@@ -44,7 +71,10 @@ namespace Tarjeta
 
                 if (cargarReal > SALDO_MAXIMO)
                 {
-                    Console.WriteLine($"Carga no permitida. El saldo máximo es de ${SALDO_MAXIMO}.");
+                    // La carga excede el máximo después de cubrir el negativo
+                    Saldo = SALDO_MAXIMO;
+                    SaldoPendiente += cargarReal - SALDO_MAXIMO;
+                    Console.WriteLine($"Se descontó el saldo negativo. Saldo: {Saldo}. Saldo pendiente: {SaldoPendiente}");
                     return;
                 }
 
@@ -53,10 +83,17 @@ namespace Tarjeta
                 return;
             }
 
-            // Verificar que el saldo no exceda el límite
+            // Verificar si la carga excede el límite
             if (Saldo + cantidad > SALDO_MAXIMO)
             {
-                Console.WriteLine($"Carga no permitida. El saldo máximo es de ${SALDO_MAXIMO}.");
+                // Calcular cuánto se puede acreditar y cuánto queda pendiente
+                float espacioDisponible = SALDO_MAXIMO - Saldo;
+                float excedente = cantidad - espacioDisponible;
+
+                Saldo = SALDO_MAXIMO;
+                SaldoPendiente += excedente;
+
+                Console.WriteLine($"Carga parcial. Saldo: {Saldo}. Saldo pendiente: {SaldoPendiente}");
                 return;
             }
 
@@ -80,6 +117,10 @@ namespace Tarjeta
             }
 
             Saldo -= monto;
+
+            // Después de descontar, intentar acreditar saldo pendiente
+            AcreditarCarga();
+
             return true;
         }
     }
