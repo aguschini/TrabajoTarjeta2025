@@ -210,13 +210,12 @@ namespace Tests1
         {
             // Arrange
             var tarjeta = new Tarjeta.Tarjeta(35000f, 1);
-            float saldoInicial = tarjeta.Saldo;
 
             // Act
-            tarjeta.Cargar(10000f); // 35000 + 10000 = 45000 (excede 40000)
+            tarjeta.Cargar(10000f); // 35000 + 10000 = 45000 (no excede 56000)
 
             // Assert
-            Assert.That(tarjeta.Saldo, Is.EqualTo(saldoInicial));
+            Assert.That(tarjeta.Saldo, Is.EqualTo(45000f), "No excede el nuevo máximo de 56000");
         }
 
         [Test]
