@@ -45,6 +45,12 @@ namespace Tarjeta
                 return; // No hay saldo pendiente
             }
 
+            // No acreditar si el saldo es negativo
+            if (Saldo < 0)
+            {
+                return; // Primero debe cargar para cubrir el negativo
+            }
+
             // Calcular cuánto se puede acreditar
             float espacioDisponible = SALDO_MAXIMO - Saldo;
 
@@ -139,12 +145,22 @@ namespace Tarjeta
         {
             ActualizarContadorMensual(tiempo);
 
+            // IMPORTANTE: Incrementar el contador ANTES de calcular el descuento
+            // para que el viaje actual se cuente correctamente
+            int viajeActual = viajesMes + 1;
+
+            // DEBUG: descomentar para ver valores
+            if (viajeActual == 30 || viajeActual == 60 || viajeActual == 81)
+            {
+                Console.WriteLine($"DEBUG: Viaje {viajeActual}, viajesMes antes={viajesMes}");
+            }
+
             // Aplicar descuentos según cantidad de viajes
-            if (viajesMes >= 30 && viajesMes < 60)
+            if (viajeActual >= 30 && viajeActual < 60)
             {
                 return montoBase * 0.80f; // 20% descuento
             }
-            else if (viajesMes >= 60 && viajesMes < 81)
+            else if (viajeActual >= 60 && viajeActual <= 80)
             {
                 return montoBase * 0.75f; // 25% descuento
             }
@@ -188,7 +204,7 @@ namespace Tarjeta
             }
 
             Saldo -= montoFinal;
-            viajesMes++; // Incrementar contador de viajes
+            viajesMes++; // Incrementar contador de viajes DESPUÉS de descontar
 
             // Después de descontar, intentar acreditar saldo pendiente
             AcreditarCarga();

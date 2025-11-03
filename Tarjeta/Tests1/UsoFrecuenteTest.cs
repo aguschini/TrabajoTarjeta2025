@@ -80,23 +80,26 @@ namespace Tests1
         [Test]
         public void UsoFrecuente_Viajes60a80_Descuento25Porciento()
         {
+            // CORREGIDO: Crear tarjeta con saldo suficiente para 80 viajes
+            var tarjetaConSaldo = new Tarjeta.Tarjeta(120000f, 1);
+
             // Arrange - Hacer 59 viajes
             for (int i = 1; i <= 59; i++)
             {
-                _colectivo.PagarCon(_tarjeta, _tiempo);
+                _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
             }
 
             // Act - Viaje 60 (primer viaje con 25% descuento)
-            Boleto boleto60 = _colectivo.PagarCon(_tarjeta, _tiempo);
+            Boleto boleto60 = _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
 
             // Act - Viajes 61 al 79
             for (int i = 61; i <= 79; i++)
             {
-                _colectivo.PagarCon(_tarjeta, _tiempo);
+                _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
             }
 
             // Act - Viaje 80
-            Boleto boleto80 = _colectivo.PagarCon(_tarjeta, _tiempo);
+            Boleto boleto80 = _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
 
             // Assert
             float montoEsperado = 1580f * 0.75f; // $1185
@@ -106,30 +109,32 @@ namespace Tests1
                     "Viaje 60: 25% descuento = $1185");
                 Assert.That(boleto80.TotalAbonado, Is.EqualTo(montoEsperado),
                     "Viaje 80: 25% descuento = $1185");
-                Assert.That(_tarjeta.ViajesMes, Is.EqualTo(80));
+                Assert.That(tarjetaConSaldo.ViajesMes, Is.EqualTo(80));
             });
         }
 
-        [Test]
         public void UsoFrecuente_Viaje81EnAdelante_TarifaNormal()
         {
+            // CORREGIDO: Crear tarjeta con saldo suficiente para 100 viajes
+            var tarjetaConSaldo = new Tarjeta.Tarjeta(150000f, 1);
+
             // Arrange - Hacer 80 viajes
             for (int i = 1; i <= 80; i++)
             {
-                _colectivo.PagarCon(_tarjeta, _tiempo);
+                _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
             }
 
             // Act - Viaje 81
-            Boleto boleto81 = _colectivo.PagarCon(_tarjeta, _tiempo);
+            Boleto boleto81 = _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
 
             // Act - Viajes 82 al 99
             for (int i = 82; i <= 99; i++)
             {
-                _colectivo.PagarCon(_tarjeta, _tiempo);
+                _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
             }
 
             // Act - Viaje 100
-            Boleto boleto100 = _colectivo.PagarCon(_tarjeta, _tiempo);
+            Boleto boleto100 = _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
 
             // Assert
             Assert.Multiple(() =>
@@ -138,7 +143,7 @@ namespace Tests1
                     "Viaje 81: vuelve a tarifa normal");
                 Assert.That(boleto100.TotalAbonado, Is.EqualTo(1580f),
                     "Viaje 100: tarifa normal");
-                Assert.That(_tarjeta.ViajesMes, Is.EqualTo(100));
+                Assert.That(tarjetaConSaldo.ViajesMes, Is.EqualTo(100));
             });
         }
 
@@ -246,44 +251,48 @@ namespace Tests1
                 "Franquicia completa no aplica descuento por uso frecuente, siempre $0");
         }
 
+
         [Test]
         public void UsoFrecuente_TransicionEntreTramos()
         {
+            // CORREGIDO: Crear tarjeta con saldo suficiente para 81 viajes
+            var tarjetaConSaldo = new Tarjeta.Tarjeta(120000f, 1);
+
             // Act - Viajes 1 al 28
             for (int i = 1; i <= 28; i++)
             {
-                _colectivo.PagarCon(_tarjeta, _tiempo);
+                _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
             }
 
             // Act - Viaje 29 (sin descuento)
-            Boleto viaje29 = _colectivo.PagarCon(_tarjeta, _tiempo);
+            Boleto viaje29 = _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
 
             // Act - Viaje 30 (empieza 20% descuento)
-            Boleto viaje30 = _colectivo.PagarCon(_tarjeta, _tiempo);
+            Boleto viaje30 = _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
 
             // Act - Viajes 31 al 58
             for (int i = 31; i <= 58; i++)
             {
-                _colectivo.PagarCon(_tarjeta, _tiempo);
+                _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
             }
 
             // Act - Viaje 59 (último con 20%)
-            Boleto viaje59 = _colectivo.PagarCon(_tarjeta, _tiempo);
+            Boleto viaje59 = _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
 
             // Act - Viaje 60 (empieza 25% descuento)
-            Boleto viaje60 = _colectivo.PagarCon(_tarjeta, _tiempo);
+            Boleto viaje60 = _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
 
             // Act - Viajes 61 al 79
             for (int i = 61; i <= 79; i++)
             {
-                _colectivo.PagarCon(_tarjeta, _tiempo);
+                _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
             }
 
             // Act - Viaje 80 (último con 25%)
-            Boleto viaje80 = _colectivo.PagarCon(_tarjeta, _tiempo);
+            Boleto viaje80 = _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
 
             // Act - Viaje 81 (vuelve a normal)
-            Boleto viaje81 = _colectivo.PagarCon(_tarjeta, _tiempo);
+            Boleto viaje81 = _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
 
             // Assert
             Assert.Multiple(() =>
@@ -315,15 +324,18 @@ namespace Tests1
             // 20 viajes más sin descuento
             totalEsperado += 20 * 1580f;
 
-            float saldoInicial = _tarjeta.Saldo;
+            // CORREGIDO: Crear tarjeta con saldo suficiente
+            // Total esperado es 140,225, más un margen para cubrir el saldo mínimo (-1200)
+            var tarjetaConSaldo = new Tarjeta.Tarjeta(150000f, 1);
+            float saldoInicial = tarjetaConSaldo.Saldo;
 
             // Act - Realizar 100 viajes
             for (int i = 1; i <= 100; i++)
             {
-                _colectivo.PagarCon(_tarjeta, _tiempo);
+                _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
             }
 
-            float totalGastado = saldoInicial - _tarjeta.Saldo;
+            float totalGastado = saldoInicial - tarjetaConSaldo.Saldo;
 
             // Assert
             Assert.That(totalGastado, Is.EqualTo(totalEsperado).Within(0.01f),
@@ -333,41 +345,45 @@ namespace Tests1
         [Test]
         public void UsoFrecuente_ContadorEnLimites_FuncionaCorrectamente()
         {
+            // CORREGIDO: Crear tarjeta con saldo suficiente para 81 viajes
+            // Necesitamos: 29*1580 + 30*1264 + 21*1185 + 1*1580 = ~114,000
+            var tarjetaConSaldo = new Tarjeta.Tarjeta(120000f, 1);
+
             // Test viaje 29 (límite superior sin descuento)
             for (int i = 1; i <= 29; i++)
             {
-                _colectivo.PagarCon(_tarjeta, _tiempo);
+                _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
             }
-            Assert.That(_tarjeta.ViajesMes, Is.EqualTo(29));
+            Assert.That(tarjetaConSaldo.ViajesMes, Is.EqualTo(29));
 
             // Test viaje 30 (inicio descuento 20%)
-            Boleto b30 = _colectivo.PagarCon(_tarjeta, _tiempo);
+            Boleto b30 = _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
             Assert.That(b30.TotalAbonado, Is.EqualTo(1264f));
-            Assert.That(_tarjeta.ViajesMes, Is.EqualTo(30));
+            Assert.That(tarjetaConSaldo.ViajesMes, Is.EqualTo(30));
 
             // Test viaje 59 (fin descuento 20%)
             for (int i = 31; i <= 59; i++)
             {
-                _colectivo.PagarCon(_tarjeta, _tiempo);
+                _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
             }
-            Assert.That(_tarjeta.ViajesMes, Is.EqualTo(59));
+            Assert.That(tarjetaConSaldo.ViajesMes, Is.EqualTo(59));
 
             // Test viaje 60 (inicio descuento 25%)
-            Boleto b60 = _colectivo.PagarCon(_tarjeta, _tiempo);
+            Boleto b60 = _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
             Assert.That(b60.TotalAbonado, Is.EqualTo(1185f));
-            Assert.That(_tarjeta.ViajesMes, Is.EqualTo(60));
+            Assert.That(tarjetaConSaldo.ViajesMes, Is.EqualTo(60));
 
             // Test viaje 80 (fin descuento 25%)
             for (int i = 61; i <= 80; i++)
             {
-                _colectivo.PagarCon(_tarjeta, _tiempo);
+                _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
             }
-            Assert.That(_tarjeta.ViajesMes, Is.EqualTo(80));
+            Assert.That(tarjetaConSaldo.ViajesMes, Is.EqualTo(80));
 
             // Test viaje 81 (vuelve a normal)
-            Boleto b81 = _colectivo.PagarCon(_tarjeta, _tiempo);
+            Boleto b81 = _colectivo.PagarCon(tarjetaConSaldo, _tiempo);
             Assert.That(b81.TotalAbonado, Is.EqualTo(1580f));
-            Assert.That(_tarjeta.ViajesMes, Is.EqualTo(81));
+            Assert.That(tarjetaConSaldo.ViajesMes, Is.EqualTo(81));
         }
 
         [Test]
