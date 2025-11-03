@@ -24,6 +24,14 @@ namespace Tarjeta
         }
 
         /// <summary>
+        /// NO aplica descuento por uso frecuente a franquicias
+        /// </summary>
+        protected override float CalcularMontoConDescuentoFrecuente(float montoBase, Tiempo tiempo)
+        {
+            return montoBase; // No aplica descuento por uso frecuente
+        }
+
+        /// <summary>
         /// Verifica si puede usar boleto gratuito en este momento
         /// </summary>
         private bool PuedeUsarBoletoGratuito(Tiempo tiempo)
@@ -67,18 +75,19 @@ namespace Tarjeta
         /// Descuenta el saldo considerando las limitaciones de boleto gratuito
         /// Requiere pasar el objeto Tiempo para aplicar restricciones
         /// </summary>
-        public bool DescontarSaldo(float monto, Tiempo tiempo)
+        public new bool DescontarSaldo(float monto, Tiempo tiempo)
         {
             // Verificar si puede usar boleto gratuito
             if (PuedeUsarBoletoGratuito(tiempo))
             {
-                // Viaja gratis
+                // Viaja gratis - no descuenta saldo
                 RegistrarViajeGratuito(tiempo);
                 return true;
             }
             else
             {
                 // Ya usó los 2 viajes gratuitos, cobra precio completo
+                // Usar el método base sin tiempo para evitar descuento frecuente
                 return base.DescontarSaldo(monto);
             }
         }
@@ -128,6 +137,14 @@ namespace Tarjeta
             ultimoViaje = null;
             viajesHoy = 0;
             fechaUltimoDia = null;
+        }
+
+        /// <summary>
+        /// NO aplica descuento por uso frecuente a franquicias
+        /// </summary>
+        protected override float CalcularMontoConDescuentoFrecuente(float montoBase, Tiempo tiempo)
+        {
+            return montoBase; // No aplica descuento por uso frecuente
         }
 
         /// <summary>
@@ -185,13 +202,15 @@ namespace Tarjeta
         /// Descuenta el saldo considerando las limitaciones de medio boleto
         /// Requiere pasar el objeto Tiempo para aplicar restricciones
         /// </summary>
-        public bool DescontarSaldo(float monto, Tiempo tiempo)
+        public new bool DescontarSaldo(float monto, Tiempo tiempo)
         {
             // Verificar si puede usar medio boleto
             if (PuedeUsarMedioBoleto(tiempo))
             {
                 // Aplica medio boleto (mitad del precio)
                 float montoMedioBoleto = monto / 2f;
+
+                // Usar método base sin tiempo para evitar descuento frecuente
                 bool resultado = base.DescontarSaldo(montoMedioBoleto);
 
                 if (resultado)
@@ -204,6 +223,7 @@ namespace Tarjeta
             else
             {
                 // No puede usar medio boleto, cobra precio completo
+                // Usar método base sin tiempo para evitar descuento frecuente
                 bool resultado = base.DescontarSaldo(monto);
 
                 // Aunque pague completo, se registra el intento
@@ -255,6 +275,23 @@ namespace Tarjeta
         // Constructor
         public FranquiciaCompleta(float saldo, int id) : base(saldo, id)
         {
+        }
+
+        /// <summary>
+        /// NO aplica descuento por uso frecuente a franquicias
+        /// </summary>
+        protected override float CalcularMontoConDescuentoFrecuente(float montoBase, Tiempo tiempo)
+        {
+            return montoBase; // No aplica descuento por uso frecuente
+        }
+
+        /// <summary>
+        /// Sobrecarga CON tiempo - viaja gratis sin descontar saldo
+        /// </summary>
+        public new bool DescontarSaldo(float monto, Tiempo tiempo)
+        {
+            // No descuenta saldo, siempre retorna true (puede viajar gratis)
+            return true;
         }
 
         /// <summary>
