@@ -15,6 +15,10 @@ namespace Tarjeta
         private int viajesMes;
         private DateTime? ultimoMesRegistrado;
 
+        // Atributos para trasbordos
+        private DateTime? ultimoBoletoFecha;
+        private string ultimoBoletoLinea;
+
         // Constantes
         protected const float SALDO_MINIMO = -1200f;
         protected const float SALDO_MAXIMO = 56000f;
@@ -33,6 +37,8 @@ namespace Tarjeta
             SaldoPendiente = 0f;
             viajesMes = 0;
             ultimoMesRegistrado = null;
+            ultimoBoletoFecha = null;
+            ultimoBoletoLinea = null;
         }
 
         /// <summary>
@@ -213,7 +219,65 @@ namespace Tarjeta
             return true;
         }
 
+        /// <summary>
+        /// Verifica si puede hacer trasbordo en este momento
+        /// Condiciones:
+        /// - Debe haber un viaje anterior
+        /// - Debe ser dentro de 1 hora desde el último viaje
+        /// - Debe ser a una línea diferente
+        /// - Debe ser de lunes a sábado de 7:00 a 22:00
+        /// </summary>
+        public bool PuedeTrasbordar(string lineaActual, Tiempo tiempo)
+        {
+            DateTime ahora = tiempo.Now();
+
+            // Si no hay viaje anterior, no puede trasbordar
+            if (!ultimoBoletoFecha.HasValue || string.IsNullOrEmpty(ultimoBoletoLinea))
+            {
+                return false;
+            }
+
+            // Verificar que sea línea diferente
+            if (lineaActual == ultimoBoletoLinea)
+            {
+                return false;
+            }
+
+            // Verificar que no haya pasado más de 1 hora
+            TimeSpan diferencia = ahora - ultimoBoletoFecha.Value;
+            if (diferencia.TotalHours > 1)
+            {
+                return false;
+            }
+
+            // Verificar día de la semana (lunes a sábado)
+            if (ahora.DayOfWeek == DayOfWeek.Sunday)
+            {
+                return false;
+            }
+
+            // Verificar horario (7:00 a 22:00)
+            int hora = ahora.Hour;
+            if (hora < 7 || hora >= 22)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Registra el último boleto para control de trasbordos
+        /// </summary>
+        public void RegistrarBoleto(string linea, Tiempo tiempo)
+        {
+            ultimoBoletoLinea = linea;
+            ultimoBoletoFecha = tiempo.Now();
+        }
+
         // Propiedades públicas para testing
         public int ViajesMes => viajesMes;
+        public DateTime? UltimoBoletoFecha => ultimoBoletoFecha;
+        public string UltimoBoletoLinea => ultimoBoletoLinea;
     }
 }
