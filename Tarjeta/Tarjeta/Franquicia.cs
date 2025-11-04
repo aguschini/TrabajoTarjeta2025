@@ -267,6 +267,7 @@ namespace Tarjeta
         /// <summary>
         /// Descuenta el saldo considerando las limitaciones de medio boleto
         /// Requiere pasar el objeto Tiempo para aplicar restricciones
+        /// CAMBIO IMPORTANTE: Ahora RECHAZA el viaje si no pasaron 5 minutos
         /// </summary>
         public new bool DescontarSaldo(float monto, Tiempo tiempo)
         {
@@ -284,28 +285,26 @@ namespace Tarjeta
                 viajesHoy = 0;
             }
 
-            float montoAPagar;
-            bool puedeUsarDescuento = true;
-
-            // Verificar restricción de 5 minutos
+            // CAMBIO: Verificar restricción de 5 minutos ANTES de procesar el pago
             if (ultimoViaje.HasValue)
             {
                 TimeSpan diferencia = ahora - ultimoViaje.Value;
                 if (diferencia.TotalMinutes < MINUTOS_ENTRE_VIAJES)
                 {
-                    // No pasaron 5 minutos - NO puede usar descuento, pero SÍ puede pagar completo
-                    puedeUsarDescuento = false;
+                    // No pasaron 5 minutos - RECHAZAR el viaje
+                    return false;
                 }
             }
 
-            // Verificar si puede usar medio boleto (considerando límite diario)
-            if (puedeUsarDescuento && viajesHoy < MAX_VIAJES_CON_DESCUENTO)
+            // Determinar el monto a pagar según cantidad de viajes del día
+            float montoAPagar;
+            if (viajesHoy < MAX_VIAJES_CON_DESCUENTO)
             {
                 montoAPagar = monto / 2f; // Medio boleto
             }
             else
             {
-                montoAPagar = monto; // Precio completo
+                montoAPagar = monto; // Precio completo (tercer viaje en adelante)
             }
 
             // Intentar el pago
@@ -318,7 +317,6 @@ namespace Tarjeta
 
             return resultado;
         }
-
 
         /// <summary>
         /// Sobrecarga del método original para mantener compatibilidad (sin tiempo)
