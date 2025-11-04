@@ -109,8 +109,16 @@ namespace Tarjeta
                 return false; // No puede usar franquicia fuera de horario
             }
 
-            // Verificar si puede usar boleto gratuito
-            if (PuedeUsarBoletoGratuito(tiempo))
+            DateTime ahora = tiempo.Now();
+
+            // Actualizar contador de día si es necesario
+            if (fechaUltimoDia.HasValue && ahora.Date != fechaUltimoDia.Value.Date)
+            {
+                viajesGratuitosHoy = 0;
+            }
+
+            // Determinar si puede viajar gratis o debe pagar completo
+            if (viajesGratuitosHoy < MAX_VIAJES_GRATUITOS)
             {
                 // Viaja gratis - no descuenta saldo
                 RegistrarViajeGratuito(tiempo);
@@ -118,7 +126,7 @@ namespace Tarjeta
             }
             else
             {
-                // Ya usó los 2 viajes gratuitos, cobra precio completo
+                // Ya usó los 2 viajes gratuitos del día, cobra precio completo
                 // Usar el método base sin tiempo para evitar descuento frecuente
                 return base.DescontarSaldo(monto);
             }
@@ -268,38 +276,49 @@ namespace Tarjeta
                 return false; // No puede usar franquicia fuera de horario
             }
 
-            // Verificar si puede usar medio boleto
-            if (PuedeUsarMedioBoleto(tiempo))
+            DateTime ahora = tiempo.Now();
+
+            // Verificar si es un nuevo día
+            if (fechaUltimoDia.HasValue && ahora.Date != fechaUltimoDia.Value.Date)
             {
-                // Aplica medio boleto (mitad del precio)
-                float montoMedioBoleto = monto / 2f;
+                viajesHoy = 0;
+            }
 
-                // Usar método base sin tiempo para evitar descuento frecuente
-                bool resultado = base.DescontarSaldo(montoMedioBoleto);
+            float montoAPagar;
+            bool puedeUsarDescuento = true;
 
-                if (resultado)
+            // Verificar restricción de 5 minutos
+            if (ultimoViaje.HasValue)
+            {
+                TimeSpan diferencia = ahora - ultimoViaje.Value;
+                if (diferencia.TotalMinutes < MINUTOS_ENTRE_VIAJES)
                 {
-                    RegistrarViaje(tiempo);
+                    // No pasaron 5 minutos - NO puede usar descuento, pero SÍ puede pagar completo
+                    puedeUsarDescuento = false;
                 }
+            }
 
-                return resultado;
+            // Verificar si puede usar medio boleto (considerando límite diario)
+            if (puedeUsarDescuento && viajesHoy < MAX_VIAJES_CON_DESCUENTO)
+            {
+                montoAPagar = monto / 2f; // Medio boleto
             }
             else
             {
-                // No puede usar medio boleto, cobra precio completo
-                // Usar método base sin tiempo para evitar descuento frecuente
-                bool resultado = base.DescontarSaldo(monto);
-
-                // Aunque pague completo, se registra el intento
-                // (para el contador de 5 minutos)
-                if (resultado)
-                {
-                    ultimoViaje = tiempo.Now();
-                }
-
-                return resultado;
+                montoAPagar = monto; // Precio completo
             }
+
+            // Intentar el pago
+            bool resultado = base.DescontarSaldo(montoAPagar);
+
+            if (resultado)
+            {
+                RegistrarViaje(tiempo);
+            }
+
+            return resultado;
         }
+
 
         /// <summary>
         /// Sobrecarga del método original para mantener compatibilidad (sin tiempo)
