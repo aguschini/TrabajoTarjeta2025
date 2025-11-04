@@ -6,6 +6,7 @@ namespace Tarjeta
     /// <summary>
     /// Tarjeta de boleto gratuito estudiantil - viaja gratis (paga $0)
     /// Limitación: máximo 2 viajes gratuitos por día
+    /// Restricción horaria: Lunes a viernes de 6:00 a 22:00
     /// </summary>
     public class BoletoGratuitoEstudiantil : Tarjeta
     {
@@ -29,6 +30,31 @@ namespace Tarjeta
         protected override float CalcularMontoConDescuentoFrecuente(float montoBase, Tiempo tiempo)
         {
             return montoBase; // No aplica descuento por uso frecuente
+        }
+
+        /// <summary>
+        /// Verifica si el horario y día son válidos para usar franquicias
+        /// Lunes a viernes de 6:00 a 22:00
+        /// </summary>
+        private bool HorarioValido(Tiempo tiempo)
+        {
+            DateTime ahora = tiempo.Now();
+
+            // Verificar día de la semana (lunes=1 a viernes=5)
+            if (ahora.DayOfWeek == DayOfWeek.Saturday ||
+                ahora.DayOfWeek == DayOfWeek.Sunday)
+            {
+                return false;
+            }
+
+            // Verificar horario (6:00 a 22:00)
+            int hora = ahora.Hour;
+            if (hora < 6 || hora >= 22)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -77,6 +103,12 @@ namespace Tarjeta
         /// </summary>
         public new bool DescontarSaldo(float monto, Tiempo tiempo)
         {
+            // VALIDAR HORARIO PRIMERO
+            if (!HorarioValido(tiempo))
+            {
+                return false; // No puede usar franquicia fuera de horario
+            }
+
             // Verificar si puede usar boleto gratuito
             if (PuedeUsarBoletoGratuito(tiempo))
             {
@@ -119,6 +151,7 @@ namespace Tarjeta
     /// <summary>
     /// Tarjeta de medio boleto estudiantil - paga la mitad del valor del pasaje
     /// Con limitaciones: 5 minutos entre viajes y máximo 2 viajes con descuento por día
+    /// Restricción horaria: Lunes a viernes de 6:00 a 22:00
     /// </summary>
     public class MedioBoletoEstudiantil : Tarjeta
     {
@@ -145,6 +178,31 @@ namespace Tarjeta
         protected override float CalcularMontoConDescuentoFrecuente(float montoBase, Tiempo tiempo)
         {
             return montoBase; // No aplica descuento por uso frecuente
+        }
+
+        /// <summary>
+        /// Verifica si el horario y día son válidos para usar franquicias
+        /// Lunes a viernes de 6:00 a 22:00
+        /// </summary>
+        private bool HorarioValido(Tiempo tiempo)
+        {
+            DateTime ahora = tiempo.Now();
+
+            // Verificar día de la semana (lunes=1 a viernes=5)
+            if (ahora.DayOfWeek == DayOfWeek.Saturday ||
+                ahora.DayOfWeek == DayOfWeek.Sunday)
+            {
+                return false;
+            }
+
+            // Verificar horario (6:00 a 22:00)
+            int hora = ahora.Hour;
+            if (hora < 6 || hora >= 22)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -204,6 +262,12 @@ namespace Tarjeta
         /// </summary>
         public new bool DescontarSaldo(float monto, Tiempo tiempo)
         {
+            // VALIDAR HORARIO PRIMERO
+            if (!HorarioValido(tiempo))
+            {
+                return false; // No puede usar franquicia fuera de horario
+            }
+
             // Verificar si puede usar medio boleto
             if (PuedeUsarMedioBoleto(tiempo))
             {
@@ -269,6 +333,7 @@ namespace Tarjeta
 
     /// <summary>
     /// Tarjeta de franquicia completa (jubilados) - viaja gratis (paga $0)
+    /// Restricción horaria: Lunes a viernes de 6:00 a 22:00
     /// </summary>
     public class FranquiciaCompleta : Tarjeta
     {
@@ -286,10 +351,42 @@ namespace Tarjeta
         }
 
         /// <summary>
+        /// Verifica si el horario y día son válidos para usar franquicias
+        /// Lunes a viernes de 6:00 a 22:00
+        /// </summary>
+        private bool HorarioValido(Tiempo tiempo)
+        {
+            DateTime ahora = tiempo.Now();
+
+            // Verificar día de la semana (lunes=1 a viernes=5)
+            if (ahora.DayOfWeek == DayOfWeek.Saturday ||
+                ahora.DayOfWeek == DayOfWeek.Sunday)
+            {
+                return false;
+            }
+
+            // Verificar horario (6:00 a 22:00)
+            int hora = ahora.Hour;
+            if (hora < 6 || hora >= 22)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Sobrecarga CON tiempo - viaja gratis sin descontar saldo
+        /// Con restricción horaria
         /// </summary>
         public new bool DescontarSaldo(float monto, Tiempo tiempo)
         {
+            // VALIDAR HORARIO
+            if (!HorarioValido(tiempo))
+            {
+                return false;
+            }
+
             // No descuenta saldo, siempre retorna true (puede viajar gratis)
             return true;
         }

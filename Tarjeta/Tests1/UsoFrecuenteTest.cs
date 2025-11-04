@@ -179,28 +179,32 @@ namespace Tests1
             var medioBoleto = new MedioBoletoEstudiantil(100000f, 2);
 
             // Hacer viajes en DÍAS DIFERENTES para mantener el descuento de medio boleto
-            // Día 1: 2 viajes con descuento
-            _tiempo = new TiempoFalso(2024, 11, 1);
+            // Día 1: 2 viajes con descuento (viernes 1 nov, 10:00)
+            _tiempo = new TiempoFalso(2024, 11, 1, 10, 0);
             _colectivo.PagarCon(medioBoleto, _tiempo);
             _tiempo.AgregarMinutos(10);
             _colectivo.PagarCon(medioBoleto, _tiempo);
 
-            // Día 2: 2 viajes con descuento
-            _tiempo.AgregarDias(1);
+            // Día 2: 2 viajes con descuento (lunes 4 nov, evitando fin de semana)
+            _tiempo = new TiempoFalso(2024, 11, 4, 10, 0);
             _colectivo.PagarCon(medioBoleto, _tiempo);
             _tiempo.AgregarMinutos(10);
             _colectivo.PagarCon(medioBoleto, _tiempo);
 
-            // Día 3: 2 viajes con descuento
-            _tiempo.AgregarDias(1);
+            // Día 3: 2 viajes con descuento (martes 5 nov)
+            _tiempo = new TiempoFalso(2024, 11, 5, 10, 0);
             _colectivo.PagarCon(medioBoleto, _tiempo);
             _tiempo.AgregarMinutos(10);
             Boleto boleto6 = _colectivo.PagarCon(medioBoleto, _tiempo);
 
             // Assert - Medio boleto siempre paga 790 en sus primeros 2 viajes del día
             // NO aplica descuento por uso frecuente
-            Assert.That(boleto6.TotalAbonado, Is.EqualTo(790f),
-                "Medio boleto no aplica descuento por uso frecuente, siempre $790 en sus 2 primeros viajes del día");
+            Assert.Multiple(() =>
+            {
+                Assert.That(boleto6, Is.Not.Null, "El viaje debería ser exitoso");
+                Assert.That(boleto6.TotalAbonado, Is.EqualTo(790f),
+                    "Medio boleto no aplica descuento por uso frecuente, siempre $790 en sus 2 primeros viajes del día");
+            });
         }
 
         [Test]
@@ -210,31 +214,36 @@ namespace Tests1
             var boletoGratuito = new BoletoGratuitoEstudiantil(100000f, 3);
 
             // Hacer viajes en DÍAS DIFERENTES para mantener viajes gratuitos
-            // Día 1: 2 viajes gratuitos
-            _tiempo = new TiempoFalso(2024, 11, 1);
+            // Día 1: 2 viajes gratuitos (viernes 1 nov, 10:00)
+            _tiempo = new TiempoFalso(2024, 11, 1, 10, 0);
             _colectivo.PagarCon(boletoGratuito, _tiempo);
             _colectivo.PagarCon(boletoGratuito, _tiempo);
 
-            // Día 2: 2 viajes gratuitos
-            _tiempo.AgregarDias(1);
+            // Día 2: 2 viajes gratuitos (lunes 4 nov, evitando fin de semana)
+            _tiempo = new TiempoFalso(2024, 11, 4, 10, 0);
             _colectivo.PagarCon(boletoGratuito, _tiempo);
             _colectivo.PagarCon(boletoGratuito, _tiempo);
 
-            // Día 3: 2 viajes gratuitos
-            _tiempo.AgregarDias(1);
+            // Día 3: 2 viajes gratuitos (martes 5 nov)
+            _tiempo = new TiempoFalso(2024, 11, 5, 10, 0);
             _colectivo.PagarCon(boletoGratuito, _tiempo);
             Boleto boleto6 = _colectivo.PagarCon(boletoGratuito, _tiempo);
 
             // Assert - Boleto gratuito siempre gratis en sus primeros 2 viajes del día
             // NO aplica descuento por uso frecuente
-            Assert.That(boleto6.TotalAbonado, Is.EqualTo(0f),
-                "Boleto gratuito no aplica descuento por uso frecuente, siempre $0 en sus 2 primeros viajes del día");
+            Assert.Multiple(() =>
+            {
+                Assert.That(boleto6, Is.Not.Null, "El viaje debería ser exitoso");
+                Assert.That(boleto6.TotalAbonado, Is.EqualTo(0f),
+                    "Boleto gratuito no aplica descuento por uso frecuente, siempre $0 en sus 2 primeros viajes del día");
+            });
         }
 
         [Test]
         public void UsoFrecuente_NoAplicaAFranquiciaCompleta()
         {
-            // Arrange
+            // Arrange - Usar viernes 1 nov a las 10:00 (horario válido para franquicias)
+            _tiempo = new TiempoFalso(2024, 11, 1, 10, 0);
             var franquicia = new FranquiciaCompleta(100000f, 4);
 
             // Hacer 35 viajes
@@ -247,8 +256,12 @@ namespace Tests1
             Boleto boleto36 = _colectivo.PagarCon(franquicia, _tiempo);
 
             // Assert
-            Assert.That(boleto36.TotalAbonado, Is.EqualTo(0f),
-                "Franquicia completa no aplica descuento por uso frecuente, siempre $0");
+            Assert.Multiple(() =>
+            {
+                Assert.That(boleto36, Is.Not.Null, "El viaje debería ser exitoso");
+                Assert.That(boleto36.TotalAbonado, Is.EqualTo(0f),
+                    "Franquicia completa no aplica descuento por uso frecuente, siempre $0");
+            });
         }
 
 
