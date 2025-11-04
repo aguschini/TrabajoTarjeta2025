@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TrabajoTarjeta;
 
 namespace Tarjeta
 {
@@ -9,6 +10,10 @@ namespace Tarjeta
         public float Saldo { get; set; }
         public int Id { get; set; }
         public float SaldoPendiente { get; protected set; }
+
+        // Atributos para boleto de uso frecuente
+        private int viajesMes;
+        private DateTime? ultimoMesRegistrado;
 
         // Constantes
         protected const float SALDO_MINIMO = -1200f;
@@ -26,6 +31,8 @@ namespace Tarjeta
             Saldo = saldo;
             Id = id;
             SaldoPendiente = 0f;
+            viajesMes = 0;
+            ultimoMesRegistrado = null;
         }
 
         /// <summary>
@@ -36,6 +43,12 @@ namespace Tarjeta
             if (SaldoPendiente <= 0)
             {
                 return; // No hay saldo pendiente
+            }
+
+            // No acreditar si el saldo es negativo
+            if (Saldo < 0)
+            {
+                return; // Primero debe cargar para cubrir el negativo
             }
 
             // Calcular cuánto se puede acreditar
@@ -102,6 +115,59 @@ namespace Tarjeta
             Console.WriteLine($"Carga exitosa. El nuevo saldo es: {Saldo}");
         }
 
+        /// <summary>
+        /// Actualiza el contador de viajes mensuales
+        /// Si es un nuevo mes, reinicia el contador
+        /// </summary>
+        private void ActualizarContadorMensual(Tiempo tiempo)
+        {
+            DateTime ahora = tiempo.Now();
+
+            // Si es un nuevo mes, reiniciar contador
+            if (!ultimoMesRegistrado.HasValue ||
+                ahora.Year != ultimoMesRegistrado.Value.Year ||
+                ahora.Month != ultimoMesRegistrado.Value.Month)
+            {
+                viajesMes = 0;
+                ultimoMesRegistrado = ahora;
+            }
+        }
+
+        /// <summary>
+        /// Calcula el monto a pagar aplicando descuento por uso frecuente
+        /// Solo aplica a tarjetas normales (no franquicias)
+        /// - Del viaje 1 al 29: Tarifa normal
+        /// - Del viaje 30 al 59: 20% de descuento
+        /// - Del viaje 60 al 80: 25% de descuento
+        /// - Del viaje 81 en adelante: Tarifa normal
+        /// </summary>
+        protected virtual float CalcularMontoConDescuentoFrecuente(float montoBase, Tiempo tiempo)
+        {
+            ActualizarContadorMensual(tiempo);
+
+            // IMPORTANTE: Incrementar el contador ANTES de calcular el descuento
+            // para que el viaje actual se cuente correctamente
+            int viajeActual = viajesMes + 1;
+
+            // DEBUG: descomentar para ver valores
+            if (viajeActual == 30 || viajeActual == 60 || viajeActual == 81)
+            {
+                Console.WriteLine($"DEBUG: Viaje {viajeActual}, viajesMes antes={viajesMes}");
+            }
+
+            // Aplicar descuentos según cantidad de viajes
+            if (viajeActual >= 30 && viajeActual < 60)
+            {
+                return montoBase * 0.80f; // 20% descuento
+            }
+            else if (viajeActual >= 60 && viajeActual <= 80)
+            {
+                return montoBase * 0.75f; // 25% descuento
+            }
+
+            return montoBase; // Sin descuento (viajes 1-29 y 81+)
+        }
+
         // Método para pagar (virtual para permitir override en clases hijas)
         public virtual bool PuedeDescontar(float monto)
         {
@@ -123,5 +189,30 @@ namespace Tarjeta
 
             return true;
         }
+
+        /// <summary>
+        /// Sobrecarga que acepta Tiempo para aplicar uso frecuente
+        /// </summary>
+        public virtual bool DescontarSaldo(float monto, Tiempo tiempo)
+        {
+            // Calcular monto con descuento por uso frecuente
+            float montoFinal = CalcularMontoConDescuentoFrecuente(monto, tiempo);
+
+            if (!PuedeDescontar(montoFinal))
+            {
+                return false;
+            }
+
+            Saldo -= montoFinal;
+            viajesMes++; // Incrementar contador de viajes DESPUÉS de descontar
+
+            // Después de descontar, intentar acreditar saldo pendiente
+            AcreditarCarga();
+
+            return true;
+        }
+
+        // Propiedades públicas para testing
+        public int ViajesMes => viajesMes;
     }
 }

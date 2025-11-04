@@ -38,10 +38,15 @@ namespace Tarjeta
             {
                 pagoExitoso = boletoGratuito.DescontarSaldo(PRECIO_BOLETO, tiempo);
             }
+            // Si es franquicia completa, usar el método con tiempo específico
+            else if (tarjeta is FranquiciaCompleta franquicia)
+            {
+                pagoExitoso = franquicia.DescontarSaldo(PRECIO_BOLETO, tiempo);
+            }
             else
             {
-                // Para otros tipos de tarjeta, usar el método normal
-                pagoExitoso = tarjeta.DescontarSaldo(PRECIO_BOLETO);
+                // Para tarjetas normales, usar el método con tiempo para aplicar uso frecuente
+                pagoExitoso = tarjeta.DescontarSaldo(PRECIO_BOLETO, tiempo);
             }
 
             if (!pagoExitoso) return null;
