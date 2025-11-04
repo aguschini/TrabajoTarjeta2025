@@ -14,7 +14,8 @@ namespace Tests1
         public void Setup()
         {
             _colectivo = new Tarjeta.Colectivo("125");
-            _tiempo = new TiempoFalso(2024, 11, 1);
+            // Establecer hora válida para franquicias (10:00 AM, horario permitido)
+            _tiempo = new TiempoFalso(2024, 11, 1, 10, 0);
         }
 
         [Test]
@@ -136,7 +137,8 @@ namespace Tests1
         {
             // Arrange
             _tarjeta = new Tarjeta.Tarjeta(2000f, 1);
-            var fechaEsperada = new System.DateTime(2024, 11, 1);
+            // La fecha esperada debe coincidir con el tiempo usado en Setup (10:00 AM)
+            var fechaEsperada = new System.DateTime(2024, 11, 1, 10, 0, 0);
 
             // Act
             Boleto boleto = _colectivo.PagarCon(_tarjeta, _tiempo);

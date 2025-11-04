@@ -16,7 +16,8 @@ namespace Tests1
         public void Setup()
         {
             _colectivo = new Colectivo("125");
-            _tiempo = new TiempoFalso(2024, 11, 1);
+            // Establecer hora válida para franquicias (10:00 AM, horario permitido)
+            _tiempo = new TiempoFalso(2024, 11, 1, 10, 0);
         }
 
         // ============================================
@@ -221,8 +222,8 @@ namespace Tests1
             // Tercer viaje del primer día (debería cobrar completo)
             Boleto boleto3Dia1 = _colectivo.PagarCon(medioBoleto, _tiempo);
 
-            // Avanzar al día siguiente
-            _tiempo.AgregarDias(1);
+            // Avanzar 3 días (viernes -> lunes, evitando fin de semana)
+            _tiempo.AgregarDias(3);
 
             // Primer viaje del nuevo día (debería volver a tener medio boleto)
             Boleto boleto1Dia2 = _colectivo.PagarCon(medioBoleto, _tiempo);
@@ -230,8 +231,10 @@ namespace Tests1
             // Assert
             Assert.Multiple(() =>
             {
+                Assert.That(boleto3Dia1, Is.Not.Null, "Tercer viaje día 1 debería ser exitoso");
                 Assert.That(boleto3Dia1.TotalAbonado, Is.EqualTo(1580f),
                     "Tercer viaje día 1: precio completo");
+                Assert.That(boleto1Dia2, Is.Not.Null, "Primer viaje día 2 debería ser exitoso");
                 Assert.That(boleto1Dia2.TotalAbonado, Is.EqualTo(790f),
                     "Primer viaje día 2: medio boleto (contador reiniciado)");
             });
@@ -361,8 +364,8 @@ namespace Tests1
             // Tercer viaje del primer día (debería cobrar completo)
             Boleto boleto3Dia1 = _colectivo.PagarCon(boletoGratuito, _tiempo);
 
-            // Avanzar al día siguiente
-            _tiempo.AgregarDias(1);
+            // Avanzar 3 días (viernes -> lunes, evitando fin de semana)
+            _tiempo.AgregarDias(3);
 
             // Primer viaje del nuevo día (debería ser gratuito otra vez)
             Boleto boleto1Dia2 = _colectivo.PagarCon(boletoGratuito, _tiempo);
@@ -370,8 +373,10 @@ namespace Tests1
             // Assert
             Assert.Multiple(() =>
             {
+                Assert.That(boleto3Dia1, Is.Not.Null, "Tercer viaje día 1 debería ser exitoso");
                 Assert.That(boleto3Dia1.TotalAbonado, Is.EqualTo(1580f),
                     "Tercer viaje día 1: precio completo");
+                Assert.That(boleto1Dia2, Is.Not.Null, "Primer viaje día 2 debería ser exitoso");
                 Assert.That(boleto1Dia2.TotalAbonado, Is.EqualTo(0f),
                     "Primer viaje día 2: gratuito (contador reiniciado)");
                 Assert.That(boletoGratuito.Saldo, Is.EqualTo(8420f), "10000 - 0 - 0 - 1580 - 0 = 8420");
