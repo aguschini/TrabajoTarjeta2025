@@ -15,9 +15,10 @@ namespace Tarjeta
         public float TotalAbonado { get; set; }
         public float SaldoRestante { get; set; }
         public int IdTarjeta { get; set; }
+        public bool EsTrasbordo { get; set; }
 
         //Constructor
-        public Boleto(DateTime fecha, string tipoTarjeta, string linea, float total, float saldoRestante, int id)
+        public Boleto(DateTime fecha, string tipoTarjeta, string linea, float total, float saldoRestante, int id, bool esTrasbordo = false)
         {
             Fecha = fecha;
             TipoTarjeta = tipoTarjeta;
@@ -25,6 +26,7 @@ namespace Tarjeta
             TotalAbonado = total;
             SaldoRestante = saldoRestante;
             IdTarjeta = id;
+            EsTrasbordo = esTrasbordo;
         }
     }
 
