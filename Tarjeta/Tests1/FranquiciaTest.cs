@@ -125,7 +125,7 @@ namespace Tests1
         // ============================================
 
         [Test]
-        public void MedioBoleto_SegundoViajeAntesDe5Minutos_CobraPrecioCompleto()
+        public void MedioBoleto_SegundoViajeAntesDe5Minutos_NoDebePermitirViaje()
         {
             // Arrange
             var medioBoleto = new MedioBoletoEstudiantil(5000f, 1);
@@ -138,19 +138,20 @@ namespace Tests1
             // Avanzar solo 3 minutos (menos de 5)
             _tiempo.AgregarMinutos(3);
 
-            // Act - Segundo viaje (antes de 5 minutos)
+            // Act - Segundo viaje (antes de 5 minutos) - DEBE RECHAZARSE
             Boleto boleto2 = _colectivo.PagarCon(medioBoleto, _tiempo);
-            float saldoDespuesSegundo = medioBoleto.Saldo;
 
             // Assert
             Assert.Multiple(() =>
             {
+                Assert.That(boleto1, Is.Not.Null, "Primer viaje debe ser exitoso");
                 Assert.That(boleto1.TotalAbonado, Is.EqualTo(790f), "Primer viaje: medio boleto");
                 Assert.That(saldoDespuesPrimero, Is.EqualTo(4210f), "Primer viaje: 5000 - 790 = 4210");
 
-                Assert.That(boleto2.TotalAbonado, Is.EqualTo(1580f),
-                    "Segundo viaje debe cobrar completo por no respetar 5 minutos");
-                Assert.That(saldoDespuesSegundo, Is.EqualTo(2630f), "Segundo viaje: 4210 - 1580 = 2630");
+                Assert.That(boleto2, Is.Null,
+                    "Segundo viaje debe ser RECHAZADO por no respetar 5 minutos");
+                Assert.That(medioBoleto.Saldo, Is.EqualTo(4210f),
+                    "Saldo no cambia cuando el viaje es rechazado");
             });
         }
 

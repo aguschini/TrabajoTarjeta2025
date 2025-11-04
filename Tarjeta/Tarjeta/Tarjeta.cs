@@ -172,6 +172,7 @@ namespace Tarjeta
         public virtual bool PuedeDescontar(float monto)
         {
             // Puede descontar si después del descuento el saldo no queda menor al permitido
+            // Nota: SALDO_MINIMO es -1200, por lo que permite saldo negativo hasta ese límite
             return (Saldo - monto) >= SALDO_MINIMO;
         }
 
